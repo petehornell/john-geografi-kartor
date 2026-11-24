@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Johns geografiövning – kartor och kartbegrepp</title>
+<style>
+:root{--blue:#2356a8;--pale:#edf4ff;--ink:#202938;--muted:#5e6876;--line:#d8e0ea;--green:#176b42;--red:#a93232}
+*{box-sizing:border-box}body{margin:0;background:#f5f7fa;color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:850px;margin:auto;padding:22px 18px 48px}.hero{background:#183f7a;color:#fff;padding:26px;border-radius:18px;margin-bottom:18px}.hero p{margin:.4em 0 0;color:#e4edff}.tag{font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;opacity:.85}h1{font-size:clamp(1.8rem,5vw,2.5rem);line-height:1.12;margin:.3em 0}h2{font-size:1.35rem;margin:.1em 0 .4em}h3{font-size:1.05rem;margin:0 0 .4em}.card{background:white;border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0;box-shadow:0 3px 12px #162f4b0b}.hint{color:var(--muted);margin-top:0}.learn{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.term{border:1px solid var(--line);border-radius:12px;overflow:hidden}.term button{font:inherit;font-weight:700;color:var(--blue);background:var(--pale);border:0;width:100%;padding:12px;text-align:left;cursor:pointer}.term .def{display:none;padding:12px}.term.open .def{display:block}label{display:block;font-weight:650;margin-bottom:6px}.q{padding:13px 0;border-top:1px solid #edf0f4}.q:first-child{border-top:0}select,input,textarea{font:inherit;padding:10px;border:1px solid #aab6c5;border-radius:9px;background:#fff;color:var(--ink);width:100%;max-width:100%}select{margin-top:5px}button.action{background:var(--blue);color:white;border:0;border-radius:10px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer;margin-top:10px}button.secondary{background:#eaf0f7;color:var(--ink);border:1px solid var(--line)}.feedback{font-weight:650;margin:8px 0 0;min-height:1.5em}.correct{color:var(--green)}.wrong{color:var(--red)}.score{font-weight:700;background:var(--pale);padding:12px;border-radius:10px;margin-top:12px;display:none}.note{background:#fff8df;border-left:4px solid #e8b941;padding:12px;border-radius:8px;color:#51421b}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.footer{text-align:center;color:var(--muted);font-size:.9rem;padding:10px}@media(max-width:560px){main{padding:12px}.card{padding:16px}.two{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main>
+<header class="hero"><div class="tag">Geografi · kartor</div><h1>Träna på kartbegrepp</h1><p>En kort övning inför fredag 27 november. Börja med att läsa orden. Testa sedan dig själv.</p></header>
+<section class="card"><h2>1. Läs och lär</h2><p class="hint">Tryck på ett begrepp för att visa förklaringen. Försök gärna säga förklaringen med egna ord.</p>
+<div class="learn" id="learn"></div></section>
+<section class="card"><h2>2. Para ihop</h2><p class="hint">Välj det begrepp som passar bäst till varje förklaring.</p><div id="match"></div><button class="action" id="checkMatch">Rätta mina svar</button><div class="score" id="matchScore" aria-live="polite"></div></section>
+<section class="card"><h2>3. Använd begreppen</h2><p class="hint">Välj det bästa svaret.</p><div id="quiz"></div><button class="action" id="checkQuiz">Visa resultat</button><div class="score" id="quizScore" aria-live="polite"></div></section>
+<section class="card"><h2>4. Förklara själv</h2><p class="hint">Svara med egna ord. Det här avsnittet rättas inte automatiskt.</p>
+<label for="own1">Vad är skillnaden mellan en tematisk karta och en topografisk karta?</label><textarea id="own1" rows="3" placeholder="Skriv eller berätta svaret högt …"></textarea>
+<label for="own2" style="margin-top:14px">Varför förändrar en kartprojektion alltid verkligheten på något sätt?</label><textarea id="own2" rows="3" placeholder="Skriv eller berätta svaret högt …"></textarea>
+<div class="note" style="margin-top:16px"><strong>Kom ihåg:</strong> En skalstav visar hur ett avstånd på kartan motsvarar ett avstånd i verkligheten.</div>
+</section>
+<div class="footer">Du kan göra om frågorna hur många gånger du vill.</div>
+</main>
+<script>
+const terms=[
+ ['Kartprojektion','Olika metoder för att rita kartor. En projektion förenklar och förändrar alltid verkligheten på något sätt.'],
+ ['Skala','Ett mätetal som talar om hur mycket en karta är förminskad.'],
+ ['Skalstav','Visar hur långt ett avstånd på kartan motsvarar i verkligheten.'],
+ ['Tematisk karta','En karta som visar ett särskilt tema, till exempel klimat, befolkning eller energianvändning.'],
+ ['Topografisk karta','En detaljerad karta som visar hur landskapet ser ut, till exempel berg, sjöar, vägar och höjdskillnader.'],
+ ['Referenskarta','Visar med karttecken hur ett område ser ut och vad som finns där. Har ofta gradnät och skalstav. Kartboken är ett exempel.'],
+ ['Gradnät','Ett nät av linjer på kartor och jordglober. Breddgrader och längdgrader hjälper oss att bestämma positioner.'],
+ ['GPS','Ett system som använder satelliter för att visa var du är, till exempel i mobilen.'],
+ ['GIS – geografiskt informationssystem','Ett digitalt system som samlar och analyserar geografisk information, ofta för att skapa kartor.'],
+ ['Digitala kartor','Kartor som kan innehålla mer information än tryckta kartor och uppdateras. De kan också vara sårbara för IT-attacker.']
+];
+const learn=document.querySelector('#learn');
+terms.forEach(([name,def])=>{const el=document.createElement('div');el.className='term';el.innerHTML=`<button type="button" aria-expanded="false">${name} <span aria-hidden="true">＋</span></button><div class="def">${def}</div>`;el.querySelector('button').onclick=()=>{el.classList.toggle('open');el.querySelector('button').setAttribute('aria-expanded',el.classList.contains('open'));el.querySelector('span').textContent=el.classList.contains('open')?'−':'＋'};learn.append(el)});
+const matches=[
+ ['En metod att rita en platt karta av jordklotet. Den förändrar alltid verkligheten lite.','Kartprojektion'],
+ ['Ett mätetal som berättar hur mycket kartan är förminskad.','Skala'],
+ ['Hjälper dig jämföra en sträcka på kartan med sträckan i verkligheten.','Skalstav'],
+ ['Visar ett särskilt ämne, till exempel var människor bor.','Tematisk karta'],
+ ['Visar detaljer i landskapet, till exempel sjöar, vägar och höjdskillnader.','Topografisk karta'],
+ ['Ett nät av breddgrader och längdgrader som hjälper dig hitta en position.','Gradnät'],
+ ['Satellitsystem som kan visa var du befinner dig.','GPS'],
+ ['Samlar och analyserar geografisk information digitalt.','GIS – geografiskt informationssystem']
+];
+const match=document.querySelector('#match');
+matches.forEach(([desc],i)=>{const row=document.createElement('div');row.className='q';row.innerHTML=`<label for="m${i}">${i+1}. ${desc}</label><select id="m${i}"><option value="">Välj begrepp …</option>${terms.map(([t])=>`<option>${t}</option>`).join('')}</select><div class="feedback" id="mf${i}" aria-live="polite"></div>`;match.append(row)});
+document.querySelector('#checkMatch').onclick=()=>{let n=0;matches.forEach(([d,a],i)=>{const ok=document.querySelector(`#m${i}`).value===a;const f=document.querySelector(`#mf${i}`);f.textContent=ok?'Rätt!':(document.querySelector(`#m${i}`).value?`Inte riktigt. Rätt svar: ${a}`:'Välj ett svar.');f.className='feedback '+(ok?'correct':'wrong');if(ok)n++});const s=document.querySelector('#matchScore');s.style.display='block';s.textContent=`Du fick ${n} av ${matches.length} rätt. Prova igen och se om du kan höja poängen.`};
+const questions=[
+ ['En karta visar nederbörd i olika delar av Sverige. Vilken sorts karta är det?',['Tematisk karta','Topografisk karta','Referenskarta'],'Tematisk karta'],
+ ['Du vill se vägar, sjöar och höjdskillnader i ett område. Vilken karta passar bäst?',['GPS','Topografisk karta','Tematisk karta'],'Topografisk karta'],
+ ['Vilket begrepp beskriver ett system som samlar och analyserar geografisk information?',['Skalstav','Gradnät','GIS – geografiskt informationssystem'],'GIS – geografiskt informationssystem'],
+ ['Vad hjälper dig att bestämma en plats med breddgrader och längdgrader?',['Gradnät','Skala','Kartprojektion'],'Gradnät'],
+ ['Vilket verktyg i mobilen kan använda satelliter för att visa var du är?',['GPS','GIS – geografiskt informationssystem','Skalstav'],'GPS'],
+ ['Vad visar hur mycket en karta är förminskad?',['Skala','Skalstav','Referenskarta'],'Skala']
+];
+const quiz=document.querySelector('#quiz');questions.forEach(([q,opts],i)=>{const row=document.createElement('div');row.className='q';row.innerHTML=`<label for="q${i}">${i+1}. ${q}</label><select id="q${i}"><option value="">Välj svar …</option>${opts.map(o=>`<option>${o}</option>`).join('')}</select><div class="feedback" id="qf${i}" aria-live="polite"></div>`;quiz.append(row)});
+document.querySelector('#checkQuiz').onclick=()=>{let n=0;questions.forEach(([,o,a],i)=>{const ok=document.querySelector(`#q${i}`).value===a;const f=document.querySelector(`#qf${i}`);f.textContent=ok?'Rätt!':(document.querySelector(`#q${i}`).value?`Rätt svar: ${a}`:'Välj ett svar.');f.className='feedback '+(ok?'correct':'wrong');if(ok)n++});const s=document.querySelector('#quizScore');s.style.display='block';s.textContent=`Resultat: ${n} av ${questions.length} rätt.`};
+</script>
+</body>
+</html>
